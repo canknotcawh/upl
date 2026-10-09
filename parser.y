@@ -26,6 +26,8 @@ int syntax_error_count = 0;
 %type <text> type
 %type <node> program items item block statement declaration for_init optional_init for_update optional_condition expression comparison additive multiplicative primary
 %destructor { free($$); } <text>
+%destructor { ast_free($$); } <node>
+%destructor { if ($$ != ast_root) ast_free($$); } program
 
 %locations
 %define parse.error detailed
@@ -71,11 +73,11 @@ statement
     | IF '(' expression ')' THEN block
       { $$ = ast_make(AST_IF, NULL, $3, $6, NULL); }
     | IF '(' expression ')' THEN block ELSE block
-      { $$ = ast_make(AST_IF, "else", $3, $6, $8); }
+      { $$ = ast_make(AST_IF, NULL, $3, $6, $8); }
     | DO block WHILE '(' expression ')' ';'
       { $$ = ast_make(AST_DO_WHILE, NULL, $2, $5, NULL); }
     | FOR '(' optional_init ';' optional_condition ';' for_update ')' block
-      { $$ = ast_make(AST_FOR, NULL, $3, $5, ast_make(AST_BLOCK, "update", $7, $9, NULL)); }
+      { $$ = ast_make(AST_FOR, NULL, $3, $5, ast_make(AST_FOR_TAIL, NULL, $7, $9, NULL)); }
     | PRINT '(' expression ')' ';'
       { $$ = ast_make(AST_PRINT, NULL, $3, NULL, NULL); }
     ;
@@ -135,6 +137,7 @@ primary
 %%
 
 void yyerror(const char *message) {
-    fprintf(stderr, "Syntax error near line %d: %s\n", yylloc.first_line, message);
+    fprintf(stderr, "Syntax error at %d:%d: %s\n",
+            yylloc.first_line, yylloc.first_column, message);
     ++syntax_error_count;
 }

@@ -8,6 +8,7 @@
 
 int lexical_error_count = 0;
 static int comment_start_line = 1;
+static int comment_start_column = 1;
 static int scan_line = 1;
 static int scan_column = 1;
 
@@ -46,19 +47,26 @@ INVALID_ID  {LETTER}+[0-9]+{LETTER}[A-Za-z0-9]*
 ">="            return GE;
 ">"             return GT;
 
-{INVALID_ID}     { fprintf(stderr, "Lexical error at line %d: identifier '%s' has digits before trailing letters.\n", yylineno, yytext); ++lexical_error_count; return INVALID; }
+{INVALID_ID}     { fprintf(stderr, "Lexical error at %d:%d: identifier '%s' has digits before trailing letters.\n", yylloc.first_line, yylloc.first_column, yytext); ++lexical_error_count; return INVALID; }
 {VALID_ID}       { yylval.text = ast_strdup(yytext); return IDENTIFIER; }
 [0-9]+           { yylval.integer = strtol(yytext, NULL, 10); return INTEGER_LITERAL; }
 
 "//"[^\n]*      { /* single-line comment */ }
-"/*"            { comment_start_line = yylloc.first_line; BEGIN(COMMENT); }
+"/*"            { comment_start_line = yylloc.first_line; comment_start_column = yylloc.first_column; BEGIN(COMMENT); }
 <COMMENT>"*/"    { BEGIN(INITIAL); }
 <COMMENT>\n      { /* yylineno is updated by Flex */ }
 <COMMENT>.       { /* ignore comment contents */ }
-<COMMENT><<EOF>> { fprintf(stderr, "Lexical error at line %d: unterminated block comment.\n", comment_start_line); ++lexical_error_count; BEGIN(INITIAL); return INVALID; }
+<COMMENT><<EOF>> {
+                    yylloc.first_line = yylloc.last_line = comment_start_line;
+                    yylloc.first_column = yylloc.last_column = comment_start_column;
+                    fprintf(stderr, "Lexical error at %d:%d: unterminated block comment.\n", comment_start_line, comment_start_column);
+                    ++lexical_error_count;
+                    BEGIN(INITIAL);
+                    return INVALID;
+                 }
 
 [ \t\r\n]+     { /* whitespace */ }
 [{}();=+*]       { return yytext[0]; }
-.                { fprintf(stderr, "Lexical error at line %d: unexpected character '%s'.\n", yylineno, yytext); ++lexical_error_count; return INVALID; }
+.                { fprintf(stderr, "Lexical error at %d:%d: unexpected character '%s'.\n", yylloc.first_line, yylloc.first_column, yytext); ++lexical_error_count; return INVALID; }
 
 %%

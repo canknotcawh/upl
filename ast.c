@@ -43,7 +43,7 @@ Ast *ast_append(Ast *list, Ast *item) {
 const char *ast_kind_name(AstKind kind) {
     static const char *names[] = {
         "Program", "Block", "Declaration", "Assignment", "If", "DoWhile",
-        "For", "Print", "Binary", "Identifier", "Integer"
+        "For", "ForTail", "Print", "Binary", "Identifier", "Integer"
     };
     if ((unsigned)kind >= sizeof(names) / sizeof(names[0])) return "Unknown";
     return names[kind];
