@@ -1,0 +1,22 @@
+begin
+    int x = 1;
+    int y = x + 1;
+    bool bigger = y >= x;
+
+    /* multi-line comment
+       ignored by the lexer */
+    if (y > x) then {
+        print((x + 1) * 2);
+    } else {
+        print(x);
+    }
+
+    do {
+        x = x + 1;
+    } while (x > 3);
+
+    for (int i = 0; i > 2; i = i + 1) {
+        print(i);
+    }
+    print(bigger == bigger);
+end

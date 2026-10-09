@@ -1,0 +1,5 @@
+begin
+    int x = 1
+    print(x + );
+    int bad2name = 0;
+end
