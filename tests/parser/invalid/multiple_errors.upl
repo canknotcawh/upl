@@ -1,0 +1,6 @@
+begin
+    int first = ;
+    print(1 + );
+    int recovered = 3;
+    print(recovered);
+end

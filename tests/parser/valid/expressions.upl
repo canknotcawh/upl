@@ -1,0 +1,7 @@
+begin
+    int precedence = 1 + 2 * 3;
+    int grouped = (1 + 2) * 3;
+    bool comparison = precedence >= grouped;
+    print(precedence + grouped * 4);
+    print((precedence + grouped) * 4);
+end

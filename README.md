@@ -46,5 +46,6 @@ On Windows, use `upl.exe` in place of `./upl` if needed. The valid example print
 - `main.c`: file input and parse result reporting
 - `examples/`: valid and invalid UPL programs
 - `INTEGRATION_CONTRACT.md`: token values, location handling, AST shape, and parallel-work agreement
+- `tests/parser/`: accepted/rejected parser inputs and a PowerShell smoke-test script
 
 The assignment sheet does not define a concrete `for` syntax; this demo adopts the common C-style form shown above. The grammar also follows the assignment's sample by requiring braces around `if`, loop, and `for` bodies.

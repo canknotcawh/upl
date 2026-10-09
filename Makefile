@@ -1,7 +1,7 @@
 CC = gcc
 FLEX = flex
 BISON = bison
-CFLAGS = -std=c11 -Wall -Wextra -pedantic
+CFLAGS = -D_POSIX_C_SOURCE=200809L -std=c11 -Wall -Wextra -pedantic
 
 all: upl
 

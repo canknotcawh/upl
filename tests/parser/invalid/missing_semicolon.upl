@@ -1,0 +1,4 @@
+begin
+    int value = 1
+    print(value);
+end
