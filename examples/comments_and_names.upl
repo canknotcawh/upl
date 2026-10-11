@@ -1,0 +1,10 @@
+begin
+    // A digit may appear at the end of an identifier.
+    int value2 = 4;
+    int begin2 = value2 + 1; // Keyword prefixes are ordinary identifiers.
+
+    /* Block comments can span
+       more than one line. */
+    bool isReady = begin2 >= value2;
+    print(isReady);
+end

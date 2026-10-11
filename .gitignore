@@ -1,5 +1,6 @@
 upl
 upl.exe
+.tools/
 parser.tab.c
 parser.tab.h
 scanner.c

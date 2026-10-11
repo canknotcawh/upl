@@ -34,7 +34,14 @@ The build creates `upl` (or `upl.exe` under MinGW).
 ```sh
 ./upl examples/valid.upl
 ./upl examples/invalid.upl
+./upl examples/declarations_and_expressions.upl
+./upl examples/conditionals.upl
+./upl examples/loops.upl
+./upl examples/comments_and_names.upl
+./upl examples/invalid_identifier.upl
 ```
+
+The valid examples cover declarations, operator precedence and parentheses, comparisons, nested `if/then/else`, `do/while`, `for`, comments, and identifier rules. `invalid.upl` shows syntax errors; `invalid_identifier.upl` shows the lexer rejecting an identifier with digits before a later letter. The program checks syntax and prints an AST; it does not execute the UPL statements.
 
 On Windows, use `upl.exe` in place of `./upl` if needed. The valid example prints an AST. The invalid example demonstrates line-numbered diagnostics.
 

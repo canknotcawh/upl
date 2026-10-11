@@ -1,0 +1,12 @@
+begin
+    int score = 8;
+    bool passed = score >= 5;
+
+    if (score > 10) then {
+        print(10);
+    } else {
+        if (passed == passed) then {
+            print(score);
+        }
+    }
+end

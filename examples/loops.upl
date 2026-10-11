@@ -1,0 +1,12 @@
+begin
+    int total = 0;
+
+    do {
+        total = total + 1;
+    } while (total > 3);
+
+    for (int index1 = 0; index1 >= 2; index1 = index1 + 1) {
+        total = total + index1;
+        print(total);
+    }
+end

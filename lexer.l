@@ -1,6 +1,8 @@
 %option noyywrap yylineno
 %x COMMENT
 %{
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "parser.tab.h"
@@ -49,7 +51,20 @@ INVALID_ID  {LETTER}+[0-9]+{LETTER}[A-Za-z0-9]*
 
 {INVALID_ID}     { fprintf(stderr, "Lexical error at %d:%d: identifier '%s' has digits before trailing letters.\n", yylloc.first_line, yylloc.first_column, yytext); ++lexical_error_count; return INVALID; }
 {VALID_ID}       { yylval.text = ast_strdup(yytext); return IDENTIFIER; }
-[0-9]+           { yylval.integer = strtol(yytext, NULL, 10); return INTEGER_LITERAL; }
+[0-9]+           {
+                    char *end;
+                    long value;
+                    errno = 0;
+                    value = strtol(yytext, &end, 10);
+                    if (errno == ERANGE || end == yytext || *end != '\0') {
+                        fprintf(stderr, "Lexical error at %d:%d: integer literal '%s' is outside the supported range (0..%ld).\n",
+                                yylloc.first_line, yylloc.first_column, yytext, LONG_MAX);
+                        ++lexical_error_count;
+                        return INVALID;
+                    }
+                    yylval.integer = value;
+                    return INTEGER_LITERAL;
+                 }
 
 "//"[^\n]*      { /* single-line comment */ }
 "/*"            { comment_start_line = yylloc.first_line; comment_start_column = yylloc.first_column; BEGIN(COMMENT); }

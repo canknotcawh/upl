@@ -1,0 +1,10 @@
+begin
+    int count1 = 3;
+    int total = count1 + 2 * 5;
+    int grouped = (count1 + 2) * 5;
+    bool large = total >= grouped;
+
+    print(total);
+    print(grouped);
+    print(large == large);
+end

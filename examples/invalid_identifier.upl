@@ -1,0 +1,5 @@
+begin
+    int value2 = 1;
+    int value2next = value2 + 1;
+    print(value2next);
+end
